@@ -4,19 +4,86 @@
  */
 package view;
 
+import controller.Gestore;
+import java.awt.Desktop;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import model.Drink;
+import model.Pizza;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import javax.swing.JPanel;
+import javax.swing.JCheckBox;
+import java.awt.GridLayout;
+
 /**
  *
  * @author reply
  */
 public class ManagePizza extends javax.swing.JFrame {
-    
+
+    DefaultListModel<String> orderModel = new DefaultListModel<>();
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManagePizza.class.getName());
+    DefaultListModel<String> menuModel = new DefaultListModel<>();
+    DefaultListModel<String> ingredientiModel = new DefaultListModel<>();
 
     /**
      * Creates new form ManagePizza
      */
     public ManagePizza() {
         initComponents();
+        jList1.setModel(orderModel);
+
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        Gestore g = new Gestore();
+        g.caricaPizze();
+        g.caricaDrink();
+
+        ArrayList<Pizza> listaPizze = g.getPizze();
+        ArrayList<Drink> listaDrink = g.getDrinks();
+
+        for (Pizza p : listaPizze) {
+            menuModel.addElement("Pizza: " + p.getNome());
+        }
+
+        for (Drink d : listaDrink) {
+            menuModel.addElement("Drink: " + d.getNome());
+        }
+
+        // carica ingredienti
+        try {
+
+            BufferedReader br = new BufferedReader(
+                    new FileReader("ingredienti.csv"));
+
+            String line;
+
+            br.readLine(); // salta intestazione
+
+            while ((line = br.readLine()) != null) {
+
+                ingredientiModel.addElement(line);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore caricamento ingredienti");
+        }
+
+        jList1.setModel(menuModel);
+        jList2.setModel(ingredientiModel);
     }
 
     /**
@@ -28,21 +95,502 @@ public class ManagePizza extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton1.setText("New pizza");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList1);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 51, 0));
+        jLabel1.setText("MENAGER MENU");
+
+        jButton2.setText("New drink");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        jButton4.setText("Apri file");
+        jButton4.addActionListener(this::jButton4ActionPerformed);
+
+        jButton5.setText("Elimina pizza o drink");
+        jButton5.addActionListener(this::jButton5ActionPerformed);
+
+        jLabel2.setText("MENU");
+
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList2);
+
+        jLabel3.setText("TOPPINGS");
+
+        jButton3.setText("Add topping");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
+
+        jButton6.setText("Delete topping");
+        jButton6.addActionListener(this::jButton6ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(55, 55, 55)
+                            .addComponent(jButton5)
+                            .addGap(169, 169, 169)
+                            .addComponent(jButton3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                            .addComponent(jButton6))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(24, 24, 24)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jScrollPane1)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(0, 0, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jButton2))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(55, 55, 55)))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(125, 125, 125)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(27, 27, 27))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel3)
+                                    .addGap(81, 81, 81)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(jButton4)
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton3)
+                    .addComponent(jButton6))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String id = JOptionPane.showInputDialog(this,
+                "ID pizza:");
+
+        String nome = JOptionPane.showInputDialog(this,
+                "Nome pizza:");
+
+        String prezzo = JOptionPane.showInputDialog(this,
+                "Prezzo pizza:");
+
+        // pannello checkbox
+        JPanel panel = new JPanel();
+
+        panel.setLayout(new GridLayout(0, 1));
+
+        ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+
+        try {
+
+            BufferedReader br = new BufferedReader(
+                    new FileReader("ingredienti.csv"));
+
+            String line;
+
+            br.readLine();
+
+            ArrayList<String> ingredientiUnici = new ArrayList<>();
+
+            while ((line = br.readLine()) != null) {
+
+                String ingrediente = line.trim();
+
+                if (!ingredientiUnici.contains(ingrediente)) {
+
+                    ingredientiUnici.add(ingrediente);
+
+                    JCheckBox cb = new JCheckBox(ingrediente);
+
+                    checkBoxes.add(cb);
+
+                    panel.add(cb);
+                }
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore caricamento ingredienti");
+        }
+
+        // mostra checkbox
+        JOptionPane.showMessageDialog(this,
+                panel,
+                "Seleziona ingredienti",
+                JOptionPane.PLAIN_MESSAGE);
+
+        try {
+
+            // salva pizza
+            FileWriter fwPizza = new FileWriter(
+                    "pizze.csv", true);
+
+            fwPizza.write(id + "," + nome + "," + prezzo + "\n");
+
+            fwPizza.close();
+
+            // salva ingredienti pizza
+            FileWriter fwIng = new FileWriter(
+                    "pizza_ingredienti.csv", true);
+
+            for (JCheckBox cb : checkBoxes) {
+
+                if (cb.isSelected()) {
+
+                    fwIng.write(id + ","
+                            + cb.getText() + "\n");
+                }
+            }
+
+            fwIng.close();
+
+            menuModel.addElement("Pizza: " + nome);
+
+            JOptionPane.showMessageDialog(this,
+                    "Pizza aggiunta!");
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore salvataggio");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String id = JOptionPane.showInputDialog(this, "ID drink:");
+
+        String nome = JOptionPane.showInputDialog(this, "Nome drink:");
+
+        String prezzo = JOptionPane.showInputDialog(this, "Prezzo drink:");
+
+        try {
+
+            FileWriter fw = new FileWriter("drink.csv", true);
+
+            fw.write(id + "," + nome + "," + prezzo + "\n");
+
+            fw.close();
+
+            menuModel.addElement("Drink: " + nome);
+
+            JOptionPane.showMessageDialog(this, "Drink aggiunto!");
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this, "Errore salvataggio file");
+
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+
+        JFileChooser chooser = new JFileChooser();
+
+        int risultato = chooser.showOpenDialog(this);
+
+        if (risultato == JFileChooser.APPROVE_OPTION) {
+
+            File fileSelezionato = chooser.getSelectedFile();
+
+            try {
+
+                Desktop desktop = Desktop.getDesktop();
+
+                desktop.open(fileSelezionato);
+
+            } catch (IOException e) {
+
+                JOptionPane.showMessageDialog(this,
+                        "Errore apertura file");
+
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String selected = jList1.getSelectedValue();
+
+        if (selected == null) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Seleziona un elemento!");
+
+            return;
+        }
+
+        try {
+
+            // ---------------- PIZZA ----------------
+            if (selected.startsWith("Pizza: ")) {
+
+                String nomePizza = selected.replace("Pizza: ", "");
+
+                BufferedReader br = new BufferedReader(
+                        new FileReader("pizze.csv"));
+
+                StringBuilder contenuto = new StringBuilder();
+
+                String line;
+
+                String idDaEliminare = "";
+
+                while ((line = br.readLine()) != null) {
+
+                    String[] parts = line.split(",");
+
+                    String idPizza = parts[0].trim();
+
+                    String nomeFile = parts[1].trim();
+
+                    if (!nomeFile.equals(nomePizza)) {
+
+                        contenuto.append(line).append("\n");
+
+                    } else {
+
+                        idDaEliminare = idPizza;
+                    }
+                }
+
+                br.close();
+
+                PrintWriter pw = new PrintWriter("pizze.csv");
+
+                pw.print(contenuto.toString());
+
+                pw.close();
+
+                // elimina ingredienti collegati alla pizza
+                BufferedReader brIng = new BufferedReader(
+                        new FileReader("pizza_ingredienti.csv"));
+
+                StringBuilder contenutoIng = new StringBuilder();
+
+                String intestazione = brIng.readLine();
+
+                contenutoIng.append(intestazione).append("\n");
+
+                while ((line = brIng.readLine()) != null) {
+
+                    String[] parts = line.split(",");
+
+                    String pizzaID = parts[0].trim();
+
+                    if (!pizzaID.equals(idDaEliminare)) {
+
+                        contenutoIng.append(line).append("\n");
+                    }
+                }
+
+                brIng.close();
+
+                PrintWriter pwIng = new PrintWriter(
+                        "pizza_ingredienti.csv");
+
+                pwIng.print(contenutoIng.toString());
+
+                pwIng.close();
+            }
+
+            // ---------------- DRINK ----------------
+            if (selected.startsWith("Drink: ")) {
+
+                String nomeDrink = selected.replace("Drink: ", "");
+
+                BufferedReader br = new BufferedReader(
+                        new FileReader("drink.csv"));
+
+                StringBuilder contenuto = new StringBuilder();
+
+                String line;
+
+                while ((line = br.readLine()) != null) {
+
+                    String[] parts = line.split(",");
+
+                    String nomeFile = parts[1].trim();
+
+                    if (!nomeFile.equals(nomeDrink)) {
+
+                        contenuto.append(line).append("\n");
+                    }
+                }
+
+                br.close();
+
+                PrintWriter pw = new PrintWriter("drink.csv");
+
+                pw.print(contenuto.toString());
+
+                pw.close();
+            }
+
+            // rimuove dalla GUI
+            menuModel.removeElement(selected);
+
+            JOptionPane.showMessageDialog(this,
+                    "Elemento eliminato!");
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore eliminazione file");
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String ingrediente = JOptionPane.showInputDialog(this,
+                "Nome ingrediente:");
+
+        try {
+
+            FileWriter fw = new FileWriter(
+                    "ingredienti.csv", true);
+
+            fw.write(ingrediente + "\n");
+
+            fw.close();
+
+            ingredientiModel.addElement(ingrediente);
+
+            JOptionPane.showMessageDialog(this,
+                    "Ingrediente aggiunto!");
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore salvataggio ingrediente");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        String selected = jList2.getSelectedValue();
+
+        if (selected == null) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Seleziona un ingrediente!");
+
+            return;
+        }
+
+        try {
+
+            BufferedReader br = new BufferedReader(
+                    new FileReader("ingredienti.csv"));
+
+            StringBuilder contenuto = new StringBuilder();
+
+            String line;
+
+            // mantiene intestazione
+            String intestazione = br.readLine();
+
+            contenuto.append(intestazione).append("\n");
+
+            while ((line = br.readLine()) != null) {
+
+                String ingrediente = line.trim();
+
+                if (!ingrediente.equals(selected)) {
+
+                    contenuto.append(line).append("\n");
+                }
+            }
+
+            br.close();
+
+            PrintWriter pw = new PrintWriter("ingredienti.csv");
+
+            pw.print(contenuto.toString());
+
+            pw.close();
+
+            ingredientiModel.removeElement(selected);
+
+            JOptionPane.showMessageDialog(this,
+                    "Ingrediente eliminato!");
+
+        } catch (IOException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Errore eliminazione ingrediente");
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +618,18 @@ public class ManagePizza extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,17 +10,20 @@ import model.Ordine;
 import java.util.*;
 import java.io.*;
 import model.Drink;
+import model.Ingredienti;
 
 public class Gestore {
 
     private ArrayList<Pizza> pizze;
     private ArrayList<Ordine> ordini;
     private ArrayList<Drink> drinks;
+    private ArrayList<Ingredienti> ingredienti;
 
     public Gestore() {
         pizze = new ArrayList<>();
         ordini = new ArrayList<>();
         drinks = new ArrayList<>();
+        ingredienti = new ArrayList<>();
     }
 
     // ---------- PIZZE ----------
@@ -149,4 +152,47 @@ public class Gestore {
         return risultato;
     }
 
+    // ---------- INGREDIENTI ----------
+    public void caricaIngredienti() {
+
+        try {
+
+            BufferedReader br
+                    = new BufferedReader(
+                            new FileReader("ingredienti.csv"));
+
+            String line;
+
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+
+                int idPizza
+                        = Integer.parseInt(parts[0].trim());
+
+                String ingrediente
+                        = parts[1].trim();
+
+                Ingredienti i = new Ingredienti(idPizza, ingrediente);
+
+                ingredienti.add(i);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Ingredienti> getIngredienti() {
+        return ingredienti;
+    }
 }
