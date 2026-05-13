@@ -1,27 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import model.Pizza;
-import model.Ordine;
-
-import java.util.*;
-import java.io.*;
 import model.Drink;
 import model.Ingredienti;
+
+import java.util.ArrayList;
+import java.io.*;
 
 public class Gestore {
 
     private ArrayList<Pizza> pizze;
-    private ArrayList<Ordine> ordini;
     private ArrayList<Drink> drinks;
     private ArrayList<Ingredienti> ingredienti;
 
     public Gestore() {
+
         pizze = new ArrayList<>();
-        ordini = new ArrayList<>();
         drinks = new ArrayList<>();
         ingredienti = new ArrayList<>();
     }
@@ -30,7 +24,11 @@ public class Gestore {
     public void caricaPizze() {
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("pizze.csv"));
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("pizze.csv"));
+
             String line;
 
             br.readLine(); // salta intestazione
@@ -41,9 +39,11 @@ public class Gestore {
 
                 int id = Integer.parseInt(parts[0]);
                 String nome = parts[1];
-                double prezzo = Double.parseDouble(parts[2]);
+                double prezzo =
+                        Double.parseDouble(parts[2]);
 
-                Pizza pizza = new Pizza(id, nome, prezzo);
+                Pizza pizza =
+                        new Pizza(id, nome, prezzo);
 
                 pizze.add(pizza);
             }
@@ -51,14 +51,21 @@ public class Gestore {
             br.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+
+            System.out.println(
+                    "Errore caricamento pizze");
         }
     }
 
+    // ---------- DRINK ----------
     public void caricaDrink() {
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("drink.csv"));
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("drink.csv"));
+
             String line;
 
             br.readLine(); // salta intestazione
@@ -69,9 +76,11 @@ public class Gestore {
 
                 int id = Integer.parseInt(parts[0]);
                 String nome = parts[1];
-                double prezzo = Double.parseDouble(parts[2]);
+                double prezzo =
+                        Double.parseDouble(parts[2]);
 
-                Drink drink = new Drink(id, nome, prezzo);
+                Drink drink =
+                        new Drink(id, nome, prezzo);
 
                 drinks.add(drink);
             }
@@ -79,77 +88,10 @@ public class Gestore {
             br.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+
+            System.out.println(
+                    "Errore caricamento drink");
         }
-    }
-
-    public void salvaOrdine(String id, String nome,
-            String pizza, String drink, double totale) {
-
-        try {
-
-            FileWriter fw = new FileWriter("ordini.csv", true);
-            PrintWriter pw = new PrintWriter(fw);
-
-            pw.println(id + ","
-                    + nome + ","
-                    + pizza + ","
-                    + drink + ","
-                    + totale);
-
-            pw.close();
-
-        } catch (IOException e) {
-
-            System.out.println("Errore salvataggio CSV");
-        }
-    }
-
-    public ArrayList<Drink> getDrinks() {
-        return drinks;
-    }
-
-    public void rimuoviPizza(int id) {
-        for (int i = 0; i < pizze.size(); i++) {
-            if (pizze.get(i).getId() == id) {
-                pizze.remove(i);
-                break; // esce dopo aver trovato la pizza
-            }
-        }
-    }
-
-    public ArrayList<Pizza> getPizze() {
-        return pizze;
-    }
-
-    // ---------- ORDINI ----------
-    public void aggiungiOrdine(Ordine o) {
-        ordini.add(o);
-    }
-
-    public ArrayList<Ordine> getOrdini() {
-        return ordini;
-    }
-
-    // ---------- RICERCA ----------
-    public ArrayList<Pizza> cercaPerNome(String nome) {
-        ArrayList<Pizza> risultato = new ArrayList<>();
-        for (Pizza p : pizze) {
-            if (p.getNome().toLowerCase().contains(nome.toLowerCase())) {//equals
-                risultato.add(p);
-            }
-        }
-        return risultato;
-    }
-
-    public ArrayList<Pizza> cercaPerPrezzo(double prezzo) {
-        ArrayList<Pizza> risultato = new ArrayList<>();
-        for (Pizza p : pizze) {
-            if (p.getPrezzo() <= prezzo) {
-                risultato.add(p);
-            }
-        }
-        return risultato;
     }
 
     // ---------- INGREDIENTI ----------
@@ -157,13 +99,13 @@ public class Gestore {
 
         try {
 
-            BufferedReader br
-                    = new BufferedReader(
+            BufferedReader br =
+                    new BufferedReader(
                             new FileReader("ingredienti.csv"));
 
             String line;
 
-            br.readLine();
+            br.readLine(); // salta intestazione
 
             while ((line = br.readLine()) != null) {
 
@@ -173,13 +115,14 @@ public class Gestore {
 
                 String[] parts = line.split(",");
 
-                int idPizza
-                        = Integer.parseInt(parts[0].trim());
+                int idPizza =
+                        Integer.parseInt(parts[0].trim());
 
-                String ingrediente
-                        = parts[1].trim();
+                String ingrediente =
+                        parts[1].trim();
 
-                Ingredienti i = new Ingredienti(idPizza, ingrediente);
+                Ingredienti i =
+                        new Ingredienti(idPizza, ingrediente);
 
                 ingredienti.add(i);
             }
@@ -188,11 +131,96 @@ public class Gestore {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            System.out.println(
+                    "Errore caricamento ingredienti");
         }
+    }
+
+    // ---------- ORDINI ----------
+    public ArrayList<String> caricaOrdini() {
+
+        ArrayList<String> ordini =
+                new ArrayList<>();
+
+        try {
+
+            BufferedReader br =
+                    new BufferedReader(
+                            new FileReader("ordini.csv"));
+
+            String line;
+
+            // NON salta intestazione
+
+            while ((line = br.readLine()) != null) {
+
+                ordini.add(line);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "Errore lettura ordini");
+        }
+
+        return ordini;
+    }
+
+    // ---------- SALVA ORDINE ----------
+    public void salvaOrdine(String id,
+            String nome,
+            String pizza,
+            String drink,
+            double totale) {
+
+        try {
+
+            FileWriter fw =
+                    new FileWriter("ordini.csv", true);
+
+            PrintWriter pw =
+                    new PrintWriter(fw);
+
+            pw.println(id + ","
+                    + nome + ","
+                    + pizza + ","
+                    + drink + ", totale "
+                    + totale);
+
+            pw.close();
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    "Errore salvataggio CSV");
+        }
+    }
+
+    // ---------- GET ----------
+    public ArrayList<Pizza> getPizze() {
+        return pizze;
+    }
+
+    public ArrayList<Drink> getDrinks() {
+        return drinks;
     }
 
     public ArrayList<Ingredienti> getIngredienti() {
         return ingredienti;
+    }
+
+    // ---------- RIMUOVI PIZZA ----------
+    public void rimuoviPizza(int id) {
+
+        for (int i = 0; i < pizze.size(); i++) {
+
+            if (pizze.get(i).getId() == id) {
+
+                pizze.remove(i);
+                break;
+            }
+        }
     }
 }
