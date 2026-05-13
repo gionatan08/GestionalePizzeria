@@ -14,14 +14,13 @@ import java.util.ArrayList;
  * @author reply
  */
 public class OrdiniPizza extends javax.swing.JFrame {
-      
+
     DefaultListModel<String> orderModel = new DefaultListModel<>();
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(OrdiniPizza.class.getName());
     DefaultListModel<String> pizzaModel = new DefaultListModel<>();
+    DefaultListModel<String> drinkModel = new DefaultListModel<>();
     private double totale = 0;
-    
-
 
     /**
      * Creates new form OrdiniPizza
@@ -33,21 +32,25 @@ public class OrdiniPizza extends javax.swing.JFrame {
         PizzaList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         DrinksList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-
-
 // 2. carica dati
         Gestore g = new Gestore();
         g.caricaPizze();
+        g.caricaDrink();
 
         ArrayList<Pizza> listaPizze = g.getPizze();
+        ArrayList<Drink> listaDrink = g.getDrinks();
 
 // 3. riempi model
         for (Pizza p : listaPizze) {
             pizzaModel.addElement(p.getNome());
         }
+        for (Drink d : listaDrink) {
+            drinkModel.addElement(d.getNome());
+        }
 
 // 4. collega alla JList
         PizzaList.setModel(pizzaModel);
+        DrinksList.setModel(drinkModel);
     }
 
     /**
@@ -100,7 +103,7 @@ public class OrdiniPizza extends javax.swing.JFrame {
         jScrollPane2.setViewportView(PizzaList);
 
         DrinksList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Beer-3.50€", "CocaCola-4.50€", "Water-Large-2€", "IceTea-1.50€", "Warter-Small-1.00€", " " };
+            String[] strings = { " " };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -149,13 +152,12 @@ public class OrdiniPizza extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,7 +192,7 @@ public class OrdiniPizza extends javax.swing.JFrame {
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Total, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(61, 103, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,10 +218,11 @@ public class OrdiniPizza extends javax.swing.JFrame {
                     .addComponent(jScrollPane3)
                     .addComponent(jScrollPane2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton3)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -230,15 +233,6 @@ public class OrdiniPizza extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         String selected = PizzaList.getSelectedValue();
-         
-
-        if (selected != null && !orderModel.contains(selected)) {
-            orderModel.addElement(selected);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String selected = DrinksList.getSelectedValue();
 
@@ -247,13 +241,90 @@ public class OrdiniPizza extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void TotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TotalActionPerformed
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        Gestore g = new Gestore();
+
+        totale = 0;
+        g.caricaPizze();
+        g.caricaDrink();
+
+        ArrayList<Pizza> listaPizze = g.getPizze();
+        ArrayList<Drink> listaDrink = g.getDrinks();
+
+        // scorri tutti gli elementi dell'ordine
+        for (int i = 0; i < orderModel.size(); i++) {
+
+            String itemOrdine = orderModel.getElementAt(i);
+
+            // cerca la pizza corrispondente
+            for (Pizza p : listaPizze) {
+
+                if (p.getNome().equals(itemOrdine)) {
+                    totale += p.getPrezzo();
+                }
+            }
+            for (Drink d : listaDrink) {
+                if (d.getNome().equals(itemOrdine)) {
+                    totale += d.getPrezzo();
+                }
+            }
+        }
+        String id = jTextField1.getText();
+        String nome = jTextField2.getText();
+
+        String pizza = "";
+        String drink = "";
+
+// prende tutti gli elementi ordinati
+        for (int i = 0; i < orderModel.size(); i++) {
+
+            String elemento = orderModel.getElementAt(i);
+
+            // controlla pizze
+            for (Pizza p : listaPizze) {
+
+                if (p.getNome().equals(elemento)) {
+
+                    if (!pizza.isEmpty()) {
+                        pizza += " - ";
+                    }
+
+                    pizza += elemento;
+                }
+            }
+
+            // controlla drink
+            for (Drink d : listaDrink) {
+
+                if (d.getNome().equals(elemento)) {
+
+                    if (!drink.isEmpty()) {
+                        drink += " - ";
+                    }
+
+                    drink += elemento;
+                }
+            }
+        }
+        // mostra totale nella textbox
+        g.salvaOrdine(id, nome, pizza, drink, totale);
+        Total.setText(String.valueOf(totale));
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void TotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalActionPerformed
-                // TODO add your handling code here:
-    }//GEN-LAST:event_TotalActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String selected = PizzaList.getSelectedValue();
+
+        if (selected != null && !orderModel.contains(selected)) {
+            orderModel.addElement(selected);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

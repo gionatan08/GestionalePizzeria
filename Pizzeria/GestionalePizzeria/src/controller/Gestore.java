@@ -9,55 +9,111 @@ import model.Ordine;
 
 import java.util.*;
 import java.io.*;
+import model.Drink;
 
 public class Gestore {
 
     private ArrayList<Pizza> pizze;
     private ArrayList<Ordine> ordini;
+    private ArrayList<Drink> drinks;
 
     public Gestore() {
         pizze = new ArrayList<>();
         ordini = new ArrayList<>();
+        drinks = new ArrayList<>();
     }
 
     // ---------- PIZZE ----------
-   public void caricaPizze() {
-       
+    public void caricaPizze() {
 
-    try {
-        BufferedReader br = new BufferedReader(new FileReader("pizze.csv"));
-        String line;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("pizze.csv"));
+            String line;
 
-        br.readLine(); // salta intestazione
+            br.readLine(); // salta intestazione
 
-        while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
 
-            String[] parts = line.split(",");
-            
-            int id = Integer.parseInt(parts[0]);
-            String nome = parts[1];
-            double prezzo = Double.parseDouble(parts[2]);
+                String[] parts = line.split(",");
 
-            Pizza pizza = new Pizza(id,nome, prezzo);
+                int id = Integer.parseInt(parts[0]);
+                String nome = parts[1];
+                double prezzo = Double.parseDouble(parts[2]);
 
-            pizze.add(pizza);
-        }
+                Pizza pizza = new Pizza(id, nome, prezzo);
 
-        br.close();
+                pizze.add(pizza);
+            }
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
+            br.close();
 
-public void rimuoviPizza(int id) {
-    for (int i = 0; i < pizze.size(); i++) {
-        if (pizze.get(i).getId() == id) {
-            pizze.remove(i);
-            break; // esce dopo aver trovato la pizza
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-}
+
+    public void caricaDrink() {
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("drink.csv"));
+            String line;
+
+            br.readLine(); // salta intestazione
+
+            while ((line = br.readLine()) != null) {
+
+                String[] parts = line.split(",");
+
+                int id = Integer.parseInt(parts[0]);
+                String nome = parts[1];
+                double prezzo = Double.parseDouble(parts[2]);
+
+                Drink drink = new Drink(id, nome, prezzo);
+
+                drinks.add(drink);
+            }
+
+            br.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void salvaOrdine(String id, String nome,
+            String pizza, String drink, double totale) {
+
+        try {
+
+            FileWriter fw = new FileWriter("ordini.csv", true);
+            PrintWriter pw = new PrintWriter(fw);
+
+            pw.println(id + ","
+                    + nome + ","
+                    + pizza + ","
+                    + drink + ","
+                    + totale);
+
+            pw.close();
+
+        } catch (IOException e) {
+
+            System.out.println("Errore salvataggio CSV");
+        }
+    }
+
+    public ArrayList<Drink> getDrinks() {
+        return drinks;
+    }
+
+    public void rimuoviPizza(int id) {
+        for (int i = 0; i < pizze.size(); i++) {
+            if (pizze.get(i).getId() == id) {
+                pizze.remove(i);
+                break; // esce dopo aver trovato la pizza
+            }
+        }
+    }
 
     public ArrayList<Pizza> getPizze() {
         return pizze;
@@ -93,7 +149,4 @@ public void rimuoviPizza(int id) {
         return risultato;
     }
 
-   
-
- 
 }
