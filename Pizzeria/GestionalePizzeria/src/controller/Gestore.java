@@ -62,9 +62,7 @@ public class Gestore {
 
         try {
 
-            BufferedReader br =
-                    new BufferedReader(
-                            new FileReader("drink.csv"));
+            BufferedReader br =new BufferedReader(new FileReader("drink.csv"));
 
             String line;
 
@@ -177,11 +175,11 @@ public class Gestore {
 
         try {
 
-            FileWriter fw =
-                    new FileWriter("ordini.csv", true);
+            FileWriter fw
+                    = new FileWriter("ordini.csv", true);
 
-            PrintWriter pw =
-                    new PrintWriter(fw);
+            PrintWriter pw
+                    = new PrintWriter(fw);
 
             pw.println(id + ","
                     + nome + ","
@@ -221,6 +219,49 @@ public class Gestore {
                 pizze.remove(i);
                 break;
             }
+        }
+    }
+
+    public void eliminaOrdine(String idDaEliminare) {
+
+        ArrayList<String> ordini = new ArrayList<>();
+
+        try {
+
+            BufferedReader br
+                    = new BufferedReader(
+                            new FileReader("ordini.csv"));
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                String[] dati = line.split(",");
+
+                // mantiene solo gli ordini con ID diverso
+                if (!dati[0].equals(idDaEliminare)) {
+
+                    ordini.add(line);
+                }
+            }
+
+            br.close();
+
+            BufferedWriter bw= new BufferedWriter(new FileWriter("ordini.csv"));
+
+            for (String ordine : ordini) {
+
+                bw.write(ordine);
+                bw.newLine();
+            }
+
+            bw.close();
+
+            System.out.println("Ordine eliminato.");
+
+        } catch (IOException e) {
+
+            System.out.println("Errore eliminazione ordine");
         }
     }
 }
